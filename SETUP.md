@@ -9,6 +9,7 @@ Complete guide for setting up MonoLink locally and deploying to production.
 - [Detailed Setup](#detailed-setup)
 - [Database Configuration](#database-configuration)
 - [Environment Variables](#environment-variables)
+- [Google OAuth Setup](#google-oauth-setup) - See [GOOGLE_OAUTH_SETUP.md](./GOOGLE_OAUTH_SETUP.md)
 - [Local Subdomain Testing](#local-subdomain-testing)
 - [Development Workflow](#development-workflow)
 - [Deployment](#deployment)

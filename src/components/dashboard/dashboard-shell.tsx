@@ -8,6 +8,7 @@ import { SignOutButton } from './sign-out-button';
 import { LinkList } from './link-list';
 import { CreateLinkForm } from './create-link-form';
 import { Link } from '@/lib/db/schema';
+import { getProfileUrl } from '@/lib/utils/url';
 
 interface DashboardShellProps {
   user: { name: string; email: string; image?: string | null };
@@ -93,7 +94,7 @@ export function DashboardShell({ user, links, stats }: DashboardShellProps) {
             </div>
 
             <a
-              href={`${process.env.NEXT_PUBLIC_APP_URL}/${user.name}`}
+              href={getProfileUrl(user.name)}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-sm font-medium"
@@ -130,9 +131,11 @@ export function DashboardShell({ user, links, stats }: DashboardShellProps) {
             <Card className="p-6 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-sm">
               <div className="space-y-2">
                 <p className="text-xs text-neutral-500 tracking-wide uppercase">Profile</p>
-                <p className="text-sm font-medium mono-meta truncate">{user.name}.monolink.app</p>
+                <p className="text-sm font-medium mono-meta truncate">
+                  {user.name}.{process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'localhost:3000'}
+                </p>
                 <a
-                  href={`${process.env.NEXT_PUBLIC_APP_URL}/${user.name}`}
+                  href={getProfileUrl(user.name)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-50 font-medium inline-flex items-center gap-1"

@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ProfileLink } from "@/components/profile/profile-link";
 import { Metadata } from "next";
 import Image from "next/image";
+import { Link2 } from "lucide-react";
 
 interface PageProps {
   params: Promise<{ domain: string }>;
@@ -68,53 +69,94 @@ export default async function ProfilePage({ params }: PageProps) {
     notFound();
   }
 
+  // Strategy: First link is featured, rest are standard
+  const [firstLink, ...restLinks] = data.links;
+
   return (
-    <div className="min-h-screen bg-linear-to-br from-background via-background to-muted/20">
-      <div className="container max-w-2xl mx-auto px-4 py-16">
-        <div className="flex flex-col items-center space-y-8">
-          {data.user.image && (
-            <div className="relative w-24 h-24">
-              <Image
-                src={data.user.image}
-                alt={data.user.name}
-                width={96}
-                height={96}
-                className="rounded-full object-cover border-4 border-background shadow-lg"
-              />
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 noise-bg relative">
+      {/* Dot Pattern */}
+      <div className="fixed inset-0 dot-pattern dark:dot-pattern-dark pointer-events-none opacity-50" />
+
+      <div className="container max-w-5xl mx-auto px-6 py-12 md:py-20 relative">
+        {/* Profile Header */}
+        <header className="text-center mb-12 space-y-6">
+          {/* Avatar */}
+          {data.user.image ? (
+            <div className="relative inline-block">
+              <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-neutral-200 dark:border-neutral-800 shadow-sm">
+                <Image
+                  src={data.user.image}
+                  alt={data.user.name}
+                  width={96}
+                  height={96}
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="relative inline-block">
+              <div className="w-24 h-24 rounded-full bg-neutral-900 dark:bg-neutral-50 border-2 border-neutral-200 dark:border-neutral-800 flex items-center justify-center shadow-sm">
+                <span className="text-4xl font-bold text-neutral-50 dark:text-neutral-900 mono-meta">
+                  {data.user.name.charAt(0).toUpperCase()}
+                </span>
+              </div>
             </div>
           )}
 
-          <div className="text-center space-y-2">
-            <h1 className="text-3xl font-bold">@{data.user.name}</h1>
-            <p className="text-muted-foreground">
-              {data.links.length} {data.links.length === 1 ? "link" : "links"}
-            </p>
+          {/* Name & Stats */}
+          <div className="space-y-3">
+            <h1 className="text-4xl md:text-5xl font-bold heading-tight">
+              @{data.user.name}
+            </h1>
+            
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-sm">
+              <Link2 size={14} strokeWidth={1.5} />
+              <span className="text-sm mono-meta">
+                {data.links.length} {data.links.length === 1 ? "link" : "links"}
+              </span>
+            </div>
           </div>
+        </header>
 
-          <div className="w-full space-y-4">
-            {data.links.length > 0 ? (
-              data.links.map((link) => (
-                <ProfileLink key={link.id} link={link} />
-              ))
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                No links available yet
+        {/* Bento Grid Links */}
+        {data.links.length > 0 ? (
+          <div className="bento-grid mb-12">
+            {/* Featured Link (first one, spans 2 columns on desktop) */}
+            {firstLink && (
+              <div className="bento-span-2">
+                <ProfileLink link={firstLink} variant="featured" />
               </div>
             )}
+            
+            {/* Rest of links in grid */}
+            {restLinks.map((link) => (
+              <ProfileLink 
+                key={link.id} 
+                link={link} 
+                variant="standard"
+              />
+            ))}
           </div>
-
-          <footer className="text-center text-sm text-muted-foreground mt-12">
-            <p>
-              Powered by{" "}
-              <a
-                href={process.env.NEXT_PUBLIC_APP_URL}
-                className="text-primary hover:underline"
-              >
-                MonoLink
-              </a>
+        ) : (
+          <div className="border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 rounded-tight p-16 text-center shadow-sm">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">
+              <Link2 size={28} className="text-neutral-400" strokeWidth={1.5} />
+            </div>
+            <h3 className="text-lg font-semibold mb-2">No links yet</h3>
+            <p className="text-sm text-neutral-500 dark:text-neutral-500">
+              Check back soon!
             </p>
-          </footer>
-        </div>
+          </div>
+        )}
+
+        {/* Footer */}
+        <footer className="text-center pt-12 space-y-3">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-sm hover-lift-subtle transition-all">
+            <span className="text-xs text-neutral-500">Powered by</span>
+            <Link2 size={14} strokeWidth={1.5} />
+            <span className="text-xs font-semibold">MonoLink</span>
+          </div>
+        </footer>
       </div>
     </div>
   );

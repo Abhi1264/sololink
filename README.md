@@ -10,6 +10,8 @@ A production-ready, open-source Linktree alternative with dynamic subdomains, dr
 - 🔒 **Authentication** - Secure auth with email/password and OAuth (Google, GitHub)
 - ⚡ **High Performance** - Built with Next.js 16 App Router and Server Actions
 - 🎯 **Type-Safe** - Full TypeScript strict mode with Drizzle ORM
+- ✨ **Modern UI** - Glassmorphism, gradient animations, and 3D card effects
+- 🎭 **Unique Design** - Innovative layouts that stand out from typical link-in-bio tools
 
 ## Tech Stack
 
